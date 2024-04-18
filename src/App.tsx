@@ -37,13 +37,32 @@ function App () {
 
     taskInput.value = '';
   };
+
+  const toggleStatus = (taskId: string) => {
+    setTaskList(
+      (task) => task.id === taskId,
+      'completed',
+      (completed) => !completed
+    );
+  }
+
+  const deleteTask = (id: string) => {
+    setTaskList(taskList.filter((task) => task.id !== id));
+  }
+
+
   return (
     <div class="container mt-5 text-center">
       <h1>Task Tracker</h1>
       <For each={taskList}>
         {(task) =>( 
           <div class="row row-cols-3 mb-3 justify-content-center">
-            <button class="btn btn-secondary w-auto">X</button>
+            <button 
+              class="btn btn-secondary w-auto"
+              onClick={() => deleteTask(task.id)}
+            >
+              X
+            </button>
             <div class={`bg-light p-2 mx-2 ${task.completed && 'text-decoration-line-through'}`}>
               {task.text}
             </div>
@@ -52,6 +71,7 @@ function App () {
               checked={task.completed}
               role='button'
               class="form-check-input h-auto px-3" 
+              onClick={() => toggleStatus(task.id)}
             />      
           </div>       
        )}
