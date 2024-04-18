@@ -1,9 +1,39 @@
-import type { Component } from 'solid-js';
 
-import logo from './logo.svg';
-import styles from './App.module.css';
+// import {createSignal} from 'solid-js';
+import { createStore } from 'solid-js/store';
 
-const App: Component = () => {
+
+type Task = {
+  id: string;
+  text: string;
+  completed: boolean;
+};
+
+function App () {
+  // const [taskList, setTaskList] = createSignal<Task[]>([]);
+  const [taskList, setTaskList] = createStore<Task[]>([]);
+
+  // setting states with signal & store!
+  // signal is for simple state management while store is for complex state management such as nested objects
+
+  const addTask = (e: Event) => {
+    e.preventDefault();
+
+    const taskInput = document.querySelector('#taskInput') as HTMLInputElement;
+    const newTask = {
+      id: Math.random().toString(36).substr(2, 9),
+      text: taskInput.value,
+      completed: false,
+    };
+
+    // setTaskList([newTask, ...taskList()]);
+    setTaskList([newTask, ...taskList]);
+
+    // console.log(taskList());
+    console.log(taskList);
+
+    taskInput.value = '';
+  };
   return (
     <div class="container mt-5 text-center">
       <h1>Task Tracker</h1>
@@ -15,7 +45,11 @@ const App: Component = () => {
           id="taskInput"
           required
         />
-        <button class="btn btn-primary ms-3 w-auto" type="submit">
+        <button 
+          class="btn btn-primary ms-3 w-auto" 
+          type="submit"
+          onClick={(e) => addTask(e)}
+        >
           Add Task
         </button>
       </form>
